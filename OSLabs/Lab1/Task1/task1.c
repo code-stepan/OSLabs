@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 void print_file_info(FILE *file) {
-    printf("FILE structure info:\n");
+    printf("Информация о структуре FILE:\n");
     printf("_flags: %d\n", file->_flags);
     printf("_IO_read_ptr: %p\n", file->_IO_read_ptr);
     printf("_IO_read_end: %p\n", file->_IO_read_end);
@@ -20,37 +20,37 @@ void print_file_info(FILE *file) {
 
 int main(int argc, char *argv[]) {
 	if (argc != 2) {
-		printf("Usage: %s <filename>\n", argv[0]);
+		printf("Неверное количество аргументов\n");
 		return 1;
 	}
 
 	unsigned char data[] = {3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5};
 	FILE *file = fopen(argv[1], "wb");
 	if (!file) {
-		perror("Error creating file");
+		perror("Ошибка создания файла");
 		return 1;
 	}
-	
+
 	fwrite(data, sizeof(unsigned char), sizeof(data), file);
 	fclose(file);
 
 	file = fopen(argv[1], "rb");
 	if (!file) {
-		perror("Error opening file");
+		perror("Ошибка открытия файла");
 		return 1;
 	}
 
 	unsigned char byte;
-	printf("Reading file byte by byte:\n");
+	printf("Чтение файла по байтам:\n");
 	while (fread(&byte, sizeof(unsigned char), 1, file) == 1) {
-		printf("Byte: %d\n", byte);
-        print_file_info(file);
+		printf("Байт: %d\n", byte);
+        	print_file_info(file);
 	}
 	fclose(file);
 
 	file = fopen(argv[1], "rb");
 	if (!file) {
-		perror("Error opening file");
+		perror("Ошибка открытия файла");
 		return 1;
 	}
 
@@ -58,7 +58,7 @@ int main(int argc, char *argv[]) {
 	unsigned char buffer[4];
 	fread(buffer, sizeof(unsigned char), 4, file);
 
-    printf("Buffer content after fread from position 3: ");
+    printf("Чтение 4 символов из буффера с 3 позиции: ");
     for (int i = 0; i < 4; i++) {
         printf("%d ", buffer[i]);
     }

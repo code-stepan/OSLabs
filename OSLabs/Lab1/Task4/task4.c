@@ -7,7 +7,7 @@ int is_prime(unsigned int n) {
     if (n <= 1) return 0;
     if (n <= 3) return 1;
     if (n % 2 == 0 || n % 3 == 0) return 0;
-    
+
     for (int i = 5; i * i <= n; i += 6) {
         if (n % i == 0 || n % (i + 2) == 0) return 0;
     }
@@ -17,64 +17,64 @@ int is_prime(unsigned int n) {
 void xor8(FILE *file) {
     unsigned char result = 0;
     unsigned char byte;
-    
+
     fseek(file, 0, SEEK_SET);
     while (fread(&byte, 1, 1, file) == 1) {
         result ^= byte;
     }
-    
-    printf("XOR8 result: %u\n", result);
+
+    printf("XOR8: %u\n", result);
 }
 
 void xorodd(FILE *file) {
     unsigned int result = 0;
     unsigned int value;
     int has_prime = 0;
-    
+
     fseek(file, 0, SEEK_SET);
     while (fread(&value, sizeof(unsigned int), 1, file) == 1) {
         unsigned char *bytes = (unsigned char *)&value;
         has_prime = 0;
-        
+
         for (int i = 0; i < 4; i++) {
             if (is_prime(bytes[i])) {
                 has_prime = 1;
                 break;
             }
         }
-        
+
         if (has_prime) {
             result ^= value;
         }
     }
-    
-    printf("XORODD result: %u\n", result);
+
+    printf("XORODD: %u\n", result);
 }
 
 void mask_count(FILE *file, unsigned int mask) {
     unsigned int value;
     int count = 0;
-    
+
     fseek(file, 0, SEEK_SET);
     while (fread(&value, sizeof(unsigned int), 1, file) == 1) {
         if ((value & mask) == mask) {
             count++;
         }
     }
-    
-    printf("Numbers matching mask 0x%X: %d\n", mask, count);
+
+    printf("Mask 0x%X: %d\n", mask, count);
 }
 
 int main(int argc, char *argv[]) {
     if (argc < 3) {
-        printf("Usage: %s <file> <command> [args]\n", argv[0]);
-        printf("Commands: xor8, xorodd, mask <hex>\n");
+        printf("Неверные аргументы\n");
+        printf("Команды: xor8, xorodd, mask <hex>\n");
         return 1;
     }
 
     FILE *file = fopen(argv[1], "rb");
     if (!file) {
-        perror("Error opening file");
+        perror("Ошибка открытия файла");
         return 1;
     }
 
@@ -87,7 +87,7 @@ int main(int argc, char *argv[]) {
         sscanf(argv[3], "%X", &mask);
         mask_count(file, mask);
     } else {
-        printf("Invalid command or arguments!\n");
+        printf("Неверный флаг\n");
     }
 
     fclose(file);
